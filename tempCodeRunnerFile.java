@@ -82,9 +82,8 @@ class encryption {
 
     public static void main(String arg[]) {
         Scanner sc = new Scanner(System.in);
-         System.out.print("Enter Your ATM Pin : ");
+
         int AtmPin = sc.nextInt();
-        System.out.println();
         System.out.println("Original ATM Pin : " + AtmPin);
 
         // ATM Pin Encoder
