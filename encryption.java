@@ -1,4 +1,4 @@
-import java.util.*; // Encription and Decryption of ATM Pin.
+import java.util.*; // Encription and Decryption of ATM Pin Using bit manipullation.
 
 class encryption {
     public class global {
@@ -44,7 +44,7 @@ class encryption {
         return msg;
     }
 
-    public static String toEncryptedBinaryForDecoder(LinkedList<Character> list){
+    public static String toEncryptedBinaryForDecoder(LinkedList<Character> list) {
         String msg = "";
         for (int i = 0; i < list.size(); i++) {
             msg += list.get(i);
@@ -72,10 +72,9 @@ class encryption {
                     x--;
                 }
 
-            }
-            else{
-            receivedPinList.set(x, receivedPinList.get(x - 1));
-            x--;
+            } else {
+                receivedPinList.set(x, receivedPinList.get(x - 1));
+                x--;
             }
         }
         return receivedPinList;
@@ -84,17 +83,16 @@ class encryption {
     public static void main(String arg[]) {
         Scanner sc = new Scanner(System.in);
 
-        int AtmPin = 54326;
+        int AtmPin = 100000;
         System.out.println("Original ATM Pin : " + AtmPin);
 
         // ATM Pin Encoder
         String a = toBinary(AtmPin);
-        System.out.println("Original Atm Pin Bit : "+ a);
+        // System.out.println("Original Atm Pin Bit : " + a);
         ArrayList<Character> list = new ArrayList<>();
 
         ArrayList<Character> EncryptedList = leftShift(list, a);
-        System.out.println();
-        System.out.println("Encrypted Signal Bit : "+EncryptedList);
+        // System.out.println("Encrypted Signal Bit : " + EncryptedList);
 
         for (int i = 0; i < EncryptedList.size(); i++) {
             if (EncryptedList.get(i) == '1')
@@ -104,23 +102,22 @@ class encryption {
 
         }
         // System.out.println(global.count_Zero);
-        String c =  toEncryptedBinaryForEncoder(EncryptedList);
+        String c = toEncryptedBinaryForEncoder(EncryptedList);
         int decimal = Integer.parseInt(c, 2);
-        System.out.println("Encrypted ATM Pin: " + decimal);
-
-        
-
+        System.out.println("Encrypted Pin: " + decimal);
+        System.out.println();
         // ATM Pin Decoder
         int receivedPin = decimal;
+        System.out.println("Received Pin : "+receivedPin);
         LinkedList<Character> recivedPinList = new LinkedList<>();
         String b = toBinary(receivedPin);
 
         recivedPinList = rightShift(recivedPinList, b);
-        System.out.println(recivedPinList);
+        // System.out.println(recivedPinList);
         String d = toEncryptedBinaryForDecoder(recivedPinList);
-        System.out.println(d);
+        // System.out.println(d);
 
         int originalPin = Integer.parseInt(d, 2);
-        System.out.println(originalPin);
+        System.out.println("Decrypted Pin : "+originalPin);
     }
 }
