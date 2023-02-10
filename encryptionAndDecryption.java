@@ -2,7 +2,7 @@ import java.util.*; // Encription and Decryption of ATM Pin Using bit manipullat
 
 class encryptionAndDecryption {
     public class global {
-        public static int one_condition =1;
+        public static int one_condition = 1;
         public static int count_Zero = 0;
     }
 
@@ -52,19 +52,20 @@ class encryptionAndDecryption {
         return msg;
     }
 
-    public static LinkedList<Character> rightShift(LinkedList<Character> receivedPinList, String dec) {
+    public static LinkedList<Character> rightShift(LinkedList<Character> receivedPinList, String dec, int one,
+            int zero) {
 
         for (int i = 0; i < dec.length(); i++) {
             char temp = dec.charAt(i);
             receivedPinList.add(temp);
         }
-        for (int i = 0; i < global.count_Zero; i++) {
+        for (int i = 0; i < zero; i++) {
             receivedPinList.addFirst('0');
         }
         int x = dec.length() - 1;
         while (x >= 0) {
             if (x == 0) {
-                if (global.one_condition == 1) {
+                if (one == 1) {
                     receivedPinList.set(0, '1');
                     x--;
                 } else {
@@ -80,13 +81,36 @@ class encryptionAndDecryption {
         return receivedPinList;
     }
 
+    public static int keyGenerator(int a, int b) {
+        int x = a;
+        x = (a * 10) + b;
+        return x;
+    }
+
+    public static int keyAdder(int d, int k) {
+        int x = d * 100;
+        x += k;
+        return x;
+    }
+
+    public static ArrayList<Integer> keyRemover(int r) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int x = r % 100;
+        r = r / 100;         
+        list.add(r);
+        list.add(x);
+
+        return list;
+    }
+
     public static void main(String arg[]) {
         Scanner sc = new Scanner(System.in);
-         System.out.print("Enter Your 6 Digit ATM Pin : ");
+        System.out.print("Enter Your 6 Digit ATM Pin : ");
         int AtmPin = sc.nextInt();
         System.out.println();
         System.out.println("Original ATM Pin : " + AtmPin);
-
+        //
+        //
         // ATM Pin Encoder
         String a = toBinary(AtmPin);
         // System.out.println("Original Atm Pin Bit : " + a);
@@ -102,24 +126,41 @@ class encryptionAndDecryption {
                 global.count_Zero++;
 
         }
-        // System.out.println(global.count_Zero);
+
         String c = toEncryptedBinaryForEncoder(EncryptedList);
         int decimal = Integer.parseInt(c, 2);
-        System.out.println("Encrypted Pin: " + decimal);
-        System.out.println();
 
-        // ATM Pin Decoder                        KEY : {1/0,number}; example: 12,07,18
-        int receivedPin = decimal;
-        System.out.println("Received Pin : "+receivedPin);
+        int key = keyGenerator(global.one_condition, global.count_Zero);
+        int decimalKey = keyAdder(decimal, key);
+        System.out.println("Encrypted Pin : " + decimalKey);
+        System.out.println();
+        //
+        //
+        //
+        //
+        // ATM Pin Decoder
+        // KEY : {1/0,number}; example: 12,07,18
+        //
+        //
+        //
+        //
+        int receivedPin = decimalKey;
+        System.out.println("Received Pin : " + receivedPin);
+        ArrayList<Integer> ListOfKey = new ArrayList<>();
+        ListOfKey = keyRemover(receivedPin);
+        receivedPin = ListOfKey.get(0);
+        int ReceivedKey = ListOfKey.get(1);
+        int Rcount_Zero = ReceivedKey % 10;
+        int Rone_condition = ReceivedKey / 10;
+
         LinkedList<Character> recivedPinList = new LinkedList<>();
         String b = toBinary(receivedPin);
 
-        recivedPinList = rightShift(recivedPinList, b);
-        // System.out.println(recivedPinList);
+        recivedPinList = rightShift(recivedPinList, b, Rone_condition, Rcount_Zero);
         String d = toEncryptedBinaryForDecoder(recivedPinList);
-        // System.out.println(d);
 
         int originalPin = Integer.parseInt(d, 2);
-        System.out.println("Decrypted Pin : "+originalPin);
+        System.out.println("Decrypted Pin : " + originalPin);
+
     }
 }
