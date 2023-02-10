@@ -105,13 +105,16 @@ class encryptionAndDecryption {
 
     public static void main(String arg[]) {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter Your 6 Digit ATM Pin : ");
+        int num[] = {2815,2119,8818,4835,1123,9918,2341,6547,3471,4364};
+
+
+        System.out.print("Enter Your 6 Digit ATM Pin : "); // Note : you cannot Enter 0 as starting of your Pin.
         int AtmPin = sc.nextInt();
         System.out.println();
         System.out.println("Original ATM Pin : " + AtmPin);
         //
         //
-        // ATM Pin Encoder
+        // ATM Pin Encoder                   
         String a = toBinary(AtmPin);
         // System.out.println("Original Atm Pin Bit : " + a);
         ArrayList<Character> list = new ArrayList<>();
@@ -132,8 +135,20 @@ class encryptionAndDecryption {
 
         int key = keyGenerator(global.one_condition, global.count_Zero);
         int decimalKey = keyAdder(decimal, key);
-        System.out.println("Encrypted Pin : " + decimalKey);
+        // System.out.println("Encrypted Pin : " + decimalKey);
+        // System.out.println();
+        double Drand = Math.random()*9;
+        int Irand = (int)Drand;
+        int decimalWithRand = decimalKey+num[Irand];
+        //  System.out.println(Irand);
+        String decimalInHex = Integer.toHexString(decimalWithRand);
+        // System.out.println(decimalInHex);
+        String IrandInString=String.valueOf(Irand);
+
+        decimalInHex += IrandInString;
+        System.out.println("Encrypted Pin : "+decimalInHex); // this is to transmit over the internet.
         System.out.println();
+
         //
         //
         //
@@ -144,8 +159,29 @@ class encryptionAndDecryption {
         //
         //
         //
-        int receivedPin = decimalKey;
-        System.out.println("Received Pin : " + receivedPin);
+        String recDecimalInHex = decimalInHex;
+        System.out.println("Received Pin : " + recDecimalInHex);
+        char dIdxInChar = recDecimalInHex.charAt(recDecimalInHex.length()-1);
+        int dIdx = dIdxInChar - '0';
+        // System.out.println(dIdx);
+         
+        StringBuilder sb = new StringBuilder(recDecimalInHex);
+        sb.deleteCharAt(recDecimalInHex.length() - 1);
+        // System.out.println(sb);
+        String singleString = sb.toString();
+        int recInDecimal=Integer.parseInt(singleString,16);
+        // System.out.println(recInDecimal);  
+        
+        recInDecimal -= num[dIdx];
+        // System.out.println(recInDecimal);
+
+
+
+
+
+
+        int receivedPin = recInDecimal;
+        
         ArrayList<Integer> ListOfKey = new ArrayList<>();
         ListOfKey = keyRemover(receivedPin);
         receivedPin = ListOfKey.get(0);
