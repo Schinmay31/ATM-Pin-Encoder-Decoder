@@ -1,8 +1,8 @@
 import java.util.*; // Encription and Decryption of ATM Pin Using bit manipullation.
 
-class encryption {
+class encryptionAndDecryption {
     public class global {
-        public static boolean key = true;
+        public static int one_condition =1;
         public static int count_Zero = 0;
     }
 
@@ -20,7 +20,7 @@ class encryption {
         }
 
         if (list.get(0) == '0') {
-            global.key = false;
+            global.one_condition = 0;
         }
         int x = 0;
         while (x != a.length()) {
@@ -64,7 +64,7 @@ class encryption {
         int x = dec.length() - 1;
         while (x >= 0) {
             if (x == 0) {
-                if (global.key == true) {
+                if (global.one_condition == 1) {
                     receivedPinList.set(0, '1');
                     x--;
                 } else {
@@ -82,8 +82,9 @@ class encryption {
 
     public static void main(String arg[]) {
         Scanner sc = new Scanner(System.in);
-
+         System.out.print("Enter Your 6 Digit ATM Pin : ");
         int AtmPin = sc.nextInt();
+        System.out.println();
         System.out.println("Original ATM Pin : " + AtmPin);
 
         // ATM Pin Encoder
@@ -106,7 +107,8 @@ class encryption {
         int decimal = Integer.parseInt(c, 2);
         System.out.println("Encrypted Pin: " + decimal);
         System.out.println();
-        // ATM Pin Decoder
+
+        // ATM Pin Decoder                        KEY : {1/0,number}; example: 12,07,18
         int receivedPin = decimal;
         System.out.println("Received Pin : "+receivedPin);
         LinkedList<Character> recivedPinList = new LinkedList<>();
