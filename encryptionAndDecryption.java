@@ -175,11 +175,6 @@ class encryptionAndDecryption {
         recInDecimal -= num[dIdx];
         // System.out.println(recInDecimal);
 
-
-
-
-
-
         int receivedPin = recInDecimal;
         
         ArrayList<Integer> ListOfKey = new ArrayList<>();
